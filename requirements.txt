@@ -1,0 +1,352 @@
+
+SQL COMMANDS TO BE IMPLEMENTED IN ORACLE-SQL PLUS:
+
+CREATE AND INSERT COMMANDS
+CREATE TABLE PHARMACY(
+    MedicineID VARCHAR2(5),
+    LastReplenishedDate DATE,
+    SupplierID VARCHAR2(5),
+    QuantityAvailable NUMBER(5),
+    CONSTRAINT Phar_PK PRIMARY KEY(MedicineID),
+    CONSTRAINT Phar_FK FOREIGN KEY(SupplierID) REFERENCES SUPPLIERS(SupplierID)
+);
+DESC PHARMACY;
+
+CREATE TABLE MEDICINES(
+    MedicineID VARCHAR2(5),
+    MedicineName VARCHAR2(20),
+    Manufacturer VARCHAR2(20),
+    DosageForm VARCHAR2(20),
+    Strength VARCHAR2(20),
+    UnitPrice NUMBER(5),
+    CONSTRAINT Med_PK PRIMARY KEY(MedicineID, MedicineName, UnitPrice),
+    CONSTRAINT Med_FK FOREIGN KEY(MedicineID) REFERENCES PHARMACY(MedicineID)
+);
+DESC MEDICINES;
+
+INSERT INTO MEDICINES VALUES('M1','Paracetomol','Man1','Tablet','500mg',10);
+INSERT INTO MEDICINES VALUES('M1','Paracetomol','Man2','Tablet','500mg',20);
+INSERT INTO MEDICINES VALUES('M2','CoughSyrup','Man3','Syrup','500ml',20);
+INSERT INTO MEDICINES VALUES('M3','Dolo 650','Man4','Tablet','500mg',20);
+INSERT INTO MEDICINES VALUES('M4','Lomofin','Man5','Tablet','500mg',20);
+INSERT INTO MEDICINES VALUES('M5','Gelucil','Man5','Tablet','500mg',10);
+SELECT *FROM MEDICINES;
+
+CREATE TABLE PRESCRIPTION1(
+    PrescriptionID VARCHAR2(5),
+    CustomerID VARCHAR2(5),
+    MedicineID VARCHAR2(5),
+    PrescribingDoctorID VARCHAR2(5),
+    Quantity NUMBER(5),
+    DataPrescribed DATE,
+    CONSTRAINT Pres1_PK PRIMARY KEY(PrescriptionID, MedicineID),
+   CONSTRAINT Pres1_FK1 FOREIGN KEY(MedicineID) REFERENCES PHARMACY(MedicineID),
+   CONSTRAINT Pres1_FK2 FOREIGN KEY(PrescribingDoctorID) REFERENCES DOCTORS(DoctorID)
+);
+DESC PRESCRIPTION1;
+
+INSERT INTO PRESCRIPTION1 VALUES('P1','C1','M1','D1',10,'20-May-2024');
+INSERT INTO PRESCRIPTION1 VALUES('P1','C1','M2','D1',10,'20-May-2024');
+INSERT INTO PRESCRIPTION1 VALUES('P2','C2','M3','D2',10,'20-May-2024');
+INSERT INTO PRESCRIPTION1 VALUES('P3','C3','M4','D3',10,'21-May-2024');
+INSERT INTO PRESCRIPTION1 VALUES('P4','C4','M5','D4',10,'22-May-2024');
+SELECT *FROM PRESCRIPTION1;
+
+CREATE TABLE PRESCRIPTION2( 
+    PrescriptionID VARCHAR2(5), 
+    MedicineID VARCHAR2(5), 
+    DosageInstructions VARCHAR2(100), 
+    CONSTRAINT Pres2_PK PRIMARY KEY(PrescriptionID, MedicineID),
+    CONSTRAINT Pres2_FK FOREIGN KEY(PrescriptionID, MedicineID) REFERENCES PRESCRIPTION1(PrescriptionID, MedicineID) );
+DESC PRESCRIPTION2;
+
+INSERT INTO PRESCRIPTION2 VALUES('P1','M1','Morning');
+INSERT INTO PRESCRIPTION2 VALUES('P1','M2','Night');
+INSERT INTO PRESCRIPTION2 VALUES('P2','M3','Night');
+INSERT INTO PRESCRIPTION2 VALUES('P3','M4','Morning');
+INSERT INTO PRESCRIPTION2 VALUES('P4','M5','Morning');
+SELECT *FROM PRESCRIPTION2;
+
+CREATE TABLE EMPLOYEES(
+    EmployeeID VARCHAR2(5),
+    EmployeeName VARCHAR2(20),
+    DOB DATE,
+    Gender VARCHAR2(2),
+    Role VARCHAR2(25),
+    Phone NUMBER(11),
+    Email VARCHAR2(20),
+    CONSTRAINT Emp_PK PRIMARY KEY(EmployeeID)
+);
+DESC EMPLOYEES;
+
+INSERT INTO EMPLOYEES VALUES ('E1','Raj','2-Feb-1974','M','Supplier',9999988888, 'raj@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E2','Niranjan','2-Feb-1974','M','Supplier',9999977777, 'niranjan@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E3','Rohan','2-Feb-1974','M','Supplier',9999966666, 'rohan@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E4','Ram','2-Feb-1974','M','Supplier',9999955555, 'ram@gmail.com');
+INSERT INTO EMPLOYEES VALUES  ('E5','Rahul','2-Feb-1974','M','Supplier',9999944444, 'rahuk@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E6','Abhishek','26-Feb-1974','M','DeliveryAgent',8888877777, 'abhihek@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E7','Joshua','26-Feb-1974','M','DeliveryAgent',8888866666, 'joshua@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E8','Vinneth','26-Feb-1974','M','DeliveryAgent',8888855555, 'vineeth@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E9','Aditya','26-Feb-1974','M','DeliveryAgent',8888844444, 'aditya@gmail.com');
+INSERT INTO EMPLOYEES VALUES ('E10','Santhosh','26-Feb-1974','M','DeliveryAgent',8888833333, 'santhosh@gmail.com');
+SELECT *FROM EMPLOYEES;
+
+CREATE TABLE CUSTOMERS(
+    CustomerID VARCHAR2(5),
+    CustomerName VARCHAR2(20),
+    DOB DATE,
+    Gender VARCHAR2(2),
+    Address VARCHAR2(20),
+    Phone NUMBER(11),
+    Email VARCHAR2(20),
+    CONSTRAINT Cust_PK PRIMARY KEY(CustomerID)
+);
+DESC CUSTOMERS;
+
+INSERT INTO CUSTOMERS VALUES	('C1','Nivetha','2-Jun-2004','F','Chennai', 9999966666, 'nivetha@gmail.com');
+INSERT INTO CUSTOMERS VALUES('C2','Praneetha','5-Feb-2004','F','Chennai',9999955555, 'praneetha@gmail.com');
+INSERT INTO CUSTOMERS VALUES('C3','Prathi','5-Jul-2004','F','Chennai',9999944444, 'prathi@gmail.com');
+INSERT INTO CUSTOMERS VALUES('C4','Neha','26-Mar-2005','F','Chennai',9999933333, 'neha@gmail.com');
+INSERT INTO CUSTOMERS VALUES('C5','Nisha','5-Jan-2004','F','Chennai',9999922222, 'nisha@gmail.com');
+SELECT *FROM CUSTOMERS;
+
+CREATE TABLE DOCTORS(
+    DoctorID VARCHAR2(5),
+    DoctorName VARCHAR2(20),
+    Email VARCHAR2(20),
+    ClinicAddress VARCHAR2(20),
+    Specialization VARCHAR2(20),
+    Phone NUMBER(11),
+    CONSTRAINT Doc_PK PRIMARY KEY(DoctorID)
+);
+DESC DOCTORS;
+
+
+INSERT INTO DOCTORS VALUES('D1','Neeharika','neeha@gmail.com','Chennai','Cardiologist', 9988998899);
+INSERT INTO DOCTORS VALUES('D2','Nandhinie','nandhinie@mgail.com','Chennai','Gynaecologist', 9977997799);
+INSERT INTO DOCTORS VALUES('D3','Priya','priya@gmail.com','Chennai','Dentist',9966996699);
+INSERT INTO DOCTORS VALUES('D4','Niranjana','niranjana@gmail.com','Chennai','Phychiatrist', 9955995599);
+INSERT INTO DOCTORS VALUES('D5','Keerthana','keerthana@gmail.com','Chennai','Nephrologist', 9944994499);
+SELECT *FROM DOCTORS;
+
+CREATE TABLE SUPPLIERS(
+    SupplierID VARCHAR2(5),
+    ContactPerson VARCHAR2(20),
+    Address VARCHAR2(20),
+    CONSTRAINT Sup_PK PRIMARY KEY(SupplierID),
+    CONSTRAINT Sup_FK FOREIGN KEY (SupplierID) REFERENCES EMPLOYEES(EmployeeID)
+);
+DESC SUPPLIERS;
+
+INSERT INTO SUPPLIERS VALUES('E1','Arun','Chennai');
+INSERT INTO SUPPLIERS VALUES('E2','Raghav','Chennai');
+INSERT INTO SUPPLIERS VALUES('E3','Hari','Chennai');
+INSERT INTO SUPPLIERS VALUES('E4','Vivek','Chennai');
+INSERT INTO SUPPLIERS VALUES('E5','Shakthi','Chennai');
+SELECT *FROM SUPPLIERS;
+
+CREATE TABLE MANUFACTURERS(
+    ManufacturerID VARCHAR2(5),
+    CompanyName VARCHAR2(30),
+    MedicineID VARCHAR2(5),
+    Address VARCHAR2(20),
+    Phone NUMBER(11),
+    CONSTRAINT Man_PK PRIMARY KEY(ManufacturerID)
+);
+DESC MANUFACTURERS;
+INSERT INTO MANUFACTURERS VALUES ('M1', 'PharmaCorp', 'MED01', '123 Health St.', 12345678901); 
+INSERT INTO MANUFACTURERS VALUES ('M2', 'Medicare Inc.', 'MED02', '456 Wellness Ave.', 23456789012); 
+INSERT INTO MANUFACTURERS VALUES ('M3', 'HealAll Ltd.', 'MED03', '789 Care Blvd.', 34567890123); 
+INSERT INTO MANUFACTURERS VALUES ('M4', 'CureCo', 'MED04', '101 Recovery Rd.', 45678901234); 
+INSERT INTO MANUFACTURERS VALUES ('M5', 'LifeSaver Pharmaceuticals', 'MED05', '202 Healthway Ln.', 56789012345);
+SELECT *FROM MANUFACTURERS;
+
+CREATE TABLE DELIVERY_AGENTS(
+    DeliveryAgentID VARCHAR2(5),
+    Availability NUMBER(2),
+    Address VARCHAR2(10),
+    CONSTRAINT Del_PK PRIMARY KEY(DeliveryAgentID),
+    CONSTRAINT Del_FK FOREIGN KEY(DeliveryAgentID) references EMPLOYEES(EmployeeID)
+);
+DESC DELIVERY_AGENTS;
+
+INSERT INTO DELIVERY_AGENTS VALUES('E6',1,'Chennai');
+INSERT INTO DELIVERY_AGENTS VALUES('E7',1,'Chennai');
+INSERT INTO DELIVERY_AGENTS VALUES('E8',1,'Chennai');
+INSERT INTO DELIVERY_AGENTS VALUES('E9',1,'Chennai');
+INSERT INTO DELIVERY_AGENTS VALUES('E10',1,'Chennai');
+SELECT *FROM DELIVERY_AGENTS;
+
+CREATE TABLE TRANSACTIONS1(
+    TransactionID VARCHAR2(5),
+    PrescriptionID VARCHAR2(5),
+    MedicineID VARCHAR2(5),
+    CustomerID VARCHAR2(5),
+    OrderDate DATE,
+    DeliveryDate DATE,
+    DeliveryAgentID VARCHAR2(5),
+    CONSTRAINT Trans1_PK PRIMARY KEY(TransactionID),
+    CONSTRAINT Trans1_FK FOREIGN KEY(PrescriptionID, MedicineID) REFERENCES PRESCRIPTION1(PrescriptionID, MedicineID)
+);
+DESC TRANSACTIONS1;
+
+INSERT INTO TRANSACTIONS1 VALUES ('T1', 'P1','M1','C1','06-AUG-2023','10-AUG-2023' , 'E6'); 
+INSERT INTO TRANSACTIONS1 VALUES ('T2', 'P1','M2','C1','06-SEP-2023','10-SEP-2023' , 'E7');
+INSERT INTO TRANSACTIONS1 VALUES ('T3', 'P2','M3', 'C2','06-NOV-2023','10-NOV-2023' , 'E8');
+INSERT INTO TRANSACTIONS1 VALUES ('T4', 'P3','M4', 'C3','25-MAR-2024','30-MAR-2024' , 'E9');
+INSERT INTO TRANSACTIONS1 VALUES ('T5', 'P4','M5','C4','24-APR-2024','29-APR-2024' , 'E10');
+SELECT *FROM TRANSACTIONS1 ;
+
+CREATE TABLE TRANSACTIONS2(
+    TransactionID VARCHAR2(5),
+    TotalPrice NUMBER(5),
+    CONSTRAINT Trans2_PK PRIMARY KEY(TransactionID ),
+    CONSTRAINT Trans2_FK1 FOREIGN KEY(TransactionID ) REFERENCES TRANSACTIONS1(TransactionID ) ON DELETE CASCADE
+);
+DESC TRANSACTIONS2;
+
+INSERT INTO TRANSACTIONS2 VALUES ('T1', 1000); 
+INSERT INTO TRANSACTIONS2 VALUES ('T2', 2000); 
+INSERT INTO TRANSACTIONS2 VALUES ('T3', 3000); 
+INSERT INTO TRANSACTIONS2 VALUES ('T4',4000);
+INSERT INTO TRANSACTIONS2 VALUES ('T5', 5000);
+SELECT *FROM TRANSACTIONS2 ;
+
+CREATE TABLE INVENTORY1(
+    OrderID VARCHAR2(5),
+    SupplierID VARCHAR2(5),
+    Manufacturer VARCHAR2(5),
+    OrderDate DATE,
+    DeliveryDate DATE,
+    MedicineID VARCHAR2(5),
+    QuantityDispensed NUMBER(5),
+    CONSTRAINT Inv1_PK PRIMARY KEY(OrderID)
+);
+DESC INVENTORY1;
+
+CREATE TABLE INVENTORY2(
+    MedicineID VARCHAR2(5),
+    QuantityDispensed NUMBER(5),
+    TotalPrice NUMBER(5),
+    CONSTRAINT Inv1_PK PRIMARY KEY(MedicineID, QuantityDispensed)
+);
+DESC INVENTORY2;
+
+ALTER TABLE EMPLOYEES ADD CONSTRAINT Emp_UK1 UNIQUE (Phone);
+ALTER TABLE CUSTOMERS ADD CONSTRAINT Cust_UK1 UNIQUE (Phone);
+ALTER TABLE DOCTORS ADD CONSTRAINT Doc_UK1 UNIQUE (Phone);
+ALTER TABLE MANUFACTURERS ADD CONSTRAINT Man_UK1 UNIQUE (Phone);
+ALTER TABLE EMPLOYEES ADD CONSTRAINT Emp_UK2 UNIQUE (Email);
+ALTER TABLE CUSTOMERS ADD CONSTRAINT Cust_UK2 UNIQUE (Email);
+ALTER TABLE DOCTORS ADD CONSTRAINT Doc_UK2 UNIQUE (Email);
+
+PROCEDURES:
+REM 1.To check login
+CREATE OR REPLACE PROCEDURE check_customer_login (
+    p_phone IN NUMBER,
+    p_password IN VARCHAR2,
+    p_exists OUT NUMBER,
+    p_valid OUT NUMBER
+) AS
+BEGIN
+    p_exists := 0;
+    p_valid := 0;
+
+    SELECT COUNT(*) INTO p_exists FROM CUSTOMERS WHERE Phone = p_phone;
+
+    IF p_exists = 1 THEN
+        SELECT COUNT(*) INTO p_valid FROM CUSTOMERS 
+        WHERE Phone = p_phone AND CustomerName = p_password;
+    END IF;
+END check_customer_login;
+/
+
+REM 2. Procedure to register a new customer
+CREATE OR REPLACE PROCEDURE register_customer (
+    p_customer_name IN VARCHAR2,
+    p_dob IN DATE,
+    p_gender IN VARCHAR2,
+    p_address IN VARCHAR2,
+    p_phone IN NUMBER,
+    p_email IN VARCHAR2
+) AS
+    v_new_customer_id VARCHAR2(5);
+BEGIN
+    -- Generate a new CustomerID in the format 'C1', 'C2', etc.
+    SELECT 'C' || TO_CHAR(NVL(MAX(SUBSTR(CustomerID, 2)), 0) + 1) INTO v_new_customer_id FROM CUSTOMERS;
+
+    INSERT INTO CUSTOMERS (CustomerID, CustomerName, DOB, Gender, Address, Phone, Email) VALUES (v_new_customer_id, p_customer_name, p_dob, p_gender, p_address, p_phone, p_email);
+    
+    COMMIT;
+END register_customer;
+/
+
+REM 3. Procedure to calculate total cost, assign a delivery agent, and update transaction details
+CREATE OR REPLACE PROCEDURE CALCULATE_TOTAL_COST(                                                 
+    p_transaction_id IN VARCHAR2                                                
+) AS                                                                            
+    v_total_cost TRANSACTIONS2.TotalPrice%TYPE;                                 
+    v_order_date TRANSACTIONS1.OrderDate%TYPE;                                  
+    v_delivery_date TRANSACTIONS1.DeliveryDate%TYPE;                            
+    v_next_agent_id DELIVERY_AGENTS.DeliveryAgentID%TYPE;                       
+    v_agent_count NUMBER;                                                       
+BEGIN                =                                                    
+    v_total_cost := 0;                                                          
+
+    FOR r_medicine IN (                                                         
+        SELECT m.UnitPrice, p.Quantity FROM MEDICINES m                                                        
+        	JOIN PRESCRIPTION1 p ON m.MedicineID = p.MedicineID                     
+        	JOIN TRANSACTIONS1 t ON p.PrescriptionID = t.PrescriptionID             
+       	 WHERE t.TransactionID = p_transaction_id) LOOP                                                                      
+        v_total_cost := v_total_cost + (r_medicine.UnitPrice * r_medicine.Quantity);                                                                                                                                                        
+    END LOOP;                                                                   
+                   
+    BEGIN                                                                       
+        INSERT INTO TRANSACTIONS2 (TransactionID, TotalPrice)  VALUES (p_transaction_id, v_total_cost);                                
+    EXCEPTION                                                                   
+        WHEN DUP_VAL_ON_INDEX THEN                                              
+            UPDATE TRANSACTIONS2 SET TotalPrice = v_total_cost                                       
+            	WHERE TransactionID = p_transaction_id;                             
+    END;                                                                  
+
+    BEGIN                                                                       
+        SELECT OrderDate INTO v_order_date FROM TRANSACTIONS1                                                      
+        	WHERE TransactionID = p_transaction_id;                                 
+        DBMS_OUTPUT.PUT_LINE('OrderDate: ' || v_order_date);                    
+    EXCEPTION                                                                   
+        WHEN NO_DATA_FOUND THEN                                                 
+            DBMS_OUTPUT.PUT_LINE('No data found for OrderDate in TRANSACTIONS1 table for Transaction ID: ' || p_transaction_id);                                
+                                                                                
+
+            RETURN;                                                             
+    END;                                                                     
+    
+    v_delivery_date := v_order_date + 5;                                        
+    DBMS_OUTPUT.PUT_LINE('Calculated DeliveryDate: ' || v_delivery_date);                             
+    SELECT COUNT(*)  INTO v_agent_count FROM DELIVERY_AGENTS                                                        
+    	WHERE AVAILABILITY = 1;                                                     
+    DBMS_OUTPUT.PUT_LINE('Available agents count: ' || v_agent_count);          
+                                                                                
+    IF v_agent_count > 0 THEN                                                   
+        SELECT DeliveryAgentID INTO v_next_agent_id FROM (                                                                  
+            SELECT DeliveryAgentID FROM DELIVERY_AGENTS                                                
+            	WHERE AVAILABILITY = 1 ORDER BY DBMS_RANDOM.VALUE)                                                                       
+        WHERE ROWNUM = 1;                                                                       
+                                                                                
+        UPDATE TRANSACTIONS1 SET DELIVERYAGENTID = v_next_agent_id, DeliveryDate = v_delivery_date  WHERE TransactionID = p_transaction_id;                               
+        UPDATE DELIVERY_AGENTS                                                  
+        SET AVAILABILITY = 0                                                    
+
+        WHERE DeliveryAgentID = v_next_agent_id;                                
+        DBMS_OUTPUT.PUT_LINE('Transaction ID: ' || p_transaction_id || ' assigned to Delivery Agent ID: ' || v_next_agent_id);                                  
+                                                                                
+    ELSE                                                    
+        UPDATE TRANSACTIONS1 SET DELIVERYAGENTID = NULL, DeliveryDate = NULL                         
+        	WHERE TransactionID = p_transaction_id;                                 
+
+        DBMS_OUTPUT.PUT_LINE('No delivery agents available for Transaction ID: '
+ || p_transaction_id);                                                          
+                                                                                
+    END IF;                                                                     
+    COMMIT;                                                                     
+END CALCULATE_TOTAL_COST; 
